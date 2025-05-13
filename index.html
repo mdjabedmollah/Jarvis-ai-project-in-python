@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced JARVIS Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Main Interface -->
+        <div class="jarvis-interface">
+            <div class="jarvis-circle">
+                <div class="inner-circle"></div>
+                <div class="wave-container">
+                    <div class="wave"></div>
+                </div>
+                <div class="visualizer-container">
+                    <canvas id="audioVisualizer" width="200" height="200"></canvas>
+                </div>
+            </div>
+            <div class="status">
+                <div class="status-text">JARVIS READY</div>
+                <div class="status-dots">
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+            </div>
+            <div class="user-profile">
+                <div id="userAvatar" class="user-avatar">
+                    <img src="/placeholder.svg?height=50&width=50" alt="User">
+                </div>
+                <div id="userName" class="user-name">Guest</div>
+            </div>
+        </div>
+        
+        <!-- Interaction Panel -->
+        <div class="interaction-panel">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="main">Main</button>
+                <button class="tab-btn" data-tab="smart-home">Smart Home</button>
+                <button class="tab-btn" data-tab="calendar">Calendar</button>
+                <button class="tab-btn" data-tab="tasks">Tasks</button>
+                <button class="tab-btn" data-tab="news">News</button>
+            </div>
+            
+            <div id="mainTab" class="tab-content active">
+                <div class="response-area" id="responseArea">
+                    <p>Hello, I am JARVIS. How can I assist you today?</p>
+                </div>
+                <div class="command-area">
+                    <button id="activateButton" class="activate-button">
+                        <span class="mic-icon">🎤</span>
+                        <span class="button-text">ACTIVATE JARVIS</span>
+                    </button>
+                    <div class="input-container">
+                        <input type="text" id="commandInput" placeholder="Type a command...">
+                        <button id="sendButton">Send</button>
+                    </div>
+                </div>
+                <div class="advanced-inputs">
+                    <div class="image-upload-container">
+                        <label for="imageUpload" class="feature-btn">
+                            <span class="upload-icon">📷</span>
+                            <span>Analyze Image</span>
+                        </label>
+                        <input type="file" id="imageUpload" accept="image/*" class="hidden">
+                    </div>
+                    <button id="faceRecognitionBtn" class="feature-btn">
+                        <span class="face-icon">👤</span>
+                        <span>Face Recognition</span>
+                    </button>
+                    <button id="gestureControlBtn" class="feature-btn">
+                        <span class="gesture-icon">👋</span>
+                        <span>Gesture Control</span>
+                    </button>
+                </div>
+                <div class="language-selector">
+                    <label for="languageSelect">Language:</label>
+                    <select id="languageSelect">
+                        <option value="en-US">English (US)</option>
+                        <option value="es-ES">Spanish</option>
+                        <option value="fr-FR">French</option>
+                        <option value="de-DE">German</option>
+                        <option value="zh-CN">Chinese</option>
+                        <option value="ja-JP">Japanese</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div id="smartHomeTab" class="tab-content">
+                <h3>Smart Home Control</h3>
+                <div class="smart-home-grid">
+                    <div class="device-card">
+                        <div class="device-icon">💡</div>
+                        <div class="device-name">Living Room Lights</div>
+                        <label class="switch">
+                            <input type="checkbox" class="device-toggle" data-device="living_room_lights">
+                            <span class="slider round"></span>
+                        </label>
+                        <input type="range" min="1" max="100" value="80" class="brightness-slider" data-device="living_room_lights">
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">💡</div>
+                        <div class="device-name">Bedroom Lights</div>
+                        <label class="switch">
+                            <input type="checkbox" class="device-toggle" data-device="bedroom_lights">
+                            <span class="slider round"></span>
+                        </label>
+                        <input type="range" min="1" max="100" value="60" class="brightness-slider" data-device="bedroom_lights">
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">🌡️</div>
+                        <div class="device-name">Thermostat</div>
+                        <div class="temp-display"><span id="currentTemp">72</span>°F</div>
+                        <div class="temp-controls">
+                            <button class="temp-btn" data-action="decrease">-</button>
+                            <button class="temp-btn" data-action="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">🔒</div>
+                        <div class="device-name">Front Door</div>
+                        <button class="door-btn locked" data-device="front_door">Locked</button>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">📺</div>
+                        <div class="device-name">TV</div>
+                        <label class="switch">
+                            <input type="checkbox" class="device-toggle" data-device="tv">
+                            <span class="slider round"></span>
+                        </label>
+                        <select class="tv-channel" data-device="tv">
+                            <option value="netflix">Netflix</option>
+                            <option value="hulu">Hulu</option>
+                            <option value="disney">Disney+</option>
+                            <option value="hbo">HBO Max</option>
+                        </select>
+                    </div>
+                    <div class="device-card">
+                        <div class="device-icon">🎵</div>
+                        <div class="device-name">Music System</div>
+                        <label class="switch">
+                            <input type="checkbox" class="device-toggle" data-device="music">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="music-controls">
+                            <button class="music-btn" data-action="prev">⏮️</button>
+                            <button class="music-btn" data-action="play">▶️</button>
+                            <button class="music-btn" data-action="next">⏭️</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="scene-controls">
+                    <h4>Scenes</h4>
+                    <div class="scene-buttons">
+                        <button class="scene-btn" data-scene="morning">Morning</button>
+                        <button class="scene-btn" data-scene="evening">Evening</button>
+                        <button class="scene-btn" data-scene="movie">Movie Time</button>
+                        <button class="scene-btn" data-scene="away">Away</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="calendarTab" class="tab-content">
+                <h3>Calendar & Reminders</h3>
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button id="prevMonth">◀</button>
+                        <h4 id="currentMonth">May 2025</h4>
+                        <button id="nextMonth">▶</button>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                </div>
+                <div class="events-container">
+                    <h4>Upcoming Events</h4>
+                    <div id="eventsList" class="events-list">
+                        <div class="event-item">
+                            <div class="event-time">9:00 AM</div>
+                            <div class="event-details">
+                                <div class="event-title">Team Meeting</div>
+                                <div class="event-location">Conference Room A</div>
+                            </div>
+                        </div>
+                        <div class="event-item">
+                            <div class="event-time">1:30 PM</div>
+                            <div class="event-details">
+                                <div class="event-title">Lunch with Client</div>
+                                <div class="event-location">Downtown Cafe</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-event">
+                        <button id="addEventBtn">+ Add Event</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="tasksTab" class="tab-content">
+                <h3>Task Management</h3>
+                <div class="tasks-container">
+                    <div class="task-input">
+                        <input type="text" id="newTaskInput" placeholder="Add a new task...">
+                        <button id="addTaskBtn">Add</button>
+                    </div>
+                    <div class="task-filters">
+                        <button class="task-filter active" data-filter="all">All</button>
+                        <button class="task-filter" data-filter="active">Active</button>
+                        <button class="task-filter" data-filter="completed">Completed</button>
+                    </div>
+                    <div id="tasksList" class="tasks-list">
+                        <div class="task-item">
+                            <label class="task-checkbox">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-text">Prepare presentation for meeting</div>
+                            <div class="task-actions">
+                                <button class="task-edit">✏️</button>
+                                <button class="task-delete">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="task-item completed">
+                            <label class="task-checkbox">
+                                <input type="checkbox" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                            <div class="task-text">Send email to team</div>
+                            <div class="task-actions">
+                                <button class="task-edit">✏️</button>
+                                <button class="task-delete">🗑️</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="newsTab" class="tab-content">
+                <h3>News Briefing</h3>
+                <div class="news-categories">
+                    <button class="news-category active" data-category="top">Top Stories</button>
+                    <button class="news-category" data-category="technology">Technology</button>
+                    <button class="news-category" data-category="business">Business</button>
+                    <button class="news-category" data-category="science">Science</button>
+                    <button class="news-category" data-category="health">Health</button>
+                </div>
+                <div id="newsList" class="news-list">
+                    <div class="news-item">
+                        <div class="news-image">
+                            <img src="/placeholder.svg?height=80&width=120" alt="News">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-title">AI Breakthrough Promises New Era of Computing</div>
+                            <div class="news-source">Tech Daily • 2 hours ago</div>
+                            <div class="news-summary">Researchers have developed a new AI algorithm that could revolutionize how computers process information...</div>
+                        </div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-image">
+                            <img src="/placeholder.svg?height=80&width=120" alt="News">
+                        </div>
+                        <div class="news-content">
+                            <div class="news-title">Global Climate Summit Reaches Historic Agreement</div>
+                            <div class="news-source">World Report • 5 hours ago</div>
+                            <div class="news-summary">World leaders have agreed to ambitious new targets for reducing carbon emissions...</div>
+                        </div>
+                    </div>
+                </div>
+                <button id="readNewsBtn" class="read-news-btn">Read News Aloud</button>
+            </div>
+        </div>
+        
+        <!-- Info Panel -->
+        <div class="info-panel">
+            <div class="info-card weather">
+                <h3>Weather</h3>
+                <div id="weatherInfo">Not available</div>
+            </div>
+            <div class="info-card time">
+                <h3>Time</h3>
+                <div id="timeInfo">--:--:--</div>
+            </div>
+            <div class="info-card sentiment">
+                <h3>Mood Analysis</h3>
+                <div id="sentimentInfo">Analyzing...</div>
+            </div>
+        </div>
+        
+        <!-- Modals -->
+        <div id="imageAnalysisPanel" class="modal hidden">
+            <div class="modal-content">
+                <h3>Image Analysis</h3>
+                <div class="image-container">
+                    <img id="analyzedImage" src="/placeholder.svg" alt="Uploaded image">
+                </div>
+                <div class="analysis-results" id="analysisResults">
+                    <p>Upload an image to analyze it.</p>
+                </div>
+                <button id="closeAnalysisBtn" class="close-btn">Close</button>
+            </div>
+        </div>
+        
+        <div id="faceRecognitionPanel" class="modal hidden">
+            <div class="modal-content">
+                <h3>Face Recognition</h3>
+                <div class="webcam-container">
+                    <video id="webcamVideo" autoplay playsinline></video>
+                    <canvas id="faceCanvas" class="face-canvas"></canvas>
+                </div>
+                <div class="recognition-results" id="recognitionResults">
+                    <p>Initializing camera...</p>
+                </div>
+                <div class="face-actions">
+                    <button id="captureBtn" class="action-btn">Capture</button>
+                    <button id="registerBtn" class="action-btn">Register Face</button>
+                    <button id="closeFaceBtn" class="close-btn">Close</button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="gestureControlPanel" class="modal hidden">
+            <div class="modal-content">
+                <h3>Gesture Control</h3>
+                <div class="webcam-container">
+                    <video id="gestureVideo" autoplay playsinline></video>
+                    <canvas id="gestureCanvas" class="gesture-canvas"></canvas>
+                </div>
+                <div class="gesture-instructions">
+                    <h4>Available Gestures:</h4>
+                    <ul>
+                        <li>👆 Point Up: Volume Up</li>
+                        <li>👇 Point Down: Volume Down</li>
+                        <li>✋ Open Palm: Pause/Play</li>
+                        <li>👊 Fist: Stop</li>
+                        <li>👈 Point Left: Previous</li>
+                        <li>👉 Point Right: Next</li>
+                    </ul>
+                </div>
+                <div class="gesture-status" id="gestureStatus">
+                    <p>Waiting for gesture...</p>
+                </div>
+                <button id="closeGestureBtn" class="close-btn">Close</button>
+            </div>
+        </div>
+        
+        <div id="addEventModal" class="modal hidden">
+            <div class="modal-content">
+                <h3>Add Event</h3>
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Title:</label>
+                        <input type="text" id="eventTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDate">Date:</label>
+                        <input type="date" id="eventDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventTime">Time:</label>
+                        <input type="time" id="eventTime" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventLocation">Location:</label>
+                        <input type="text" id="eventLocation">
+                    </div>
+                    <div class="form-group">
+                        <label for="eventDescription">Description:</label>
+                        <textarea id="eventDescription"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn">Save</button>
+                        <button type="button" id="cancelEventBtn" class="cancel-btn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
